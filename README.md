@@ -1,15 +1,11 @@
-Harbor-setupwrapper is a new (experimental) mechanism to deploy [VMware Harbor](https://github.com/vmware/harbor) ver 0.5.0.
+Harbor-setupwrapper is a new (experimental) mechanism to deploy [VMware Harbor](https://github.com/vmware/harbor).
 
-It "dockerizes" the [original setup process](https://github.com/vmware/harbor/blob/master/docs/installation_guide.md) by allowing a user to immediately bring up (with Docker Compose) Harbor without going through the all the steps of the setup process as described [here](https://github.com/vmware/harbor/blob/master/docs/installation_guide.md). It works by setting shell environment variables instead of having to edit the `harbor.cfg` file. The environment variables are passed onto the harbor-setupwrapper container which goes through the preparation process.  
+It "dockerizes" the [original setup process](https://github.com/vmware/harbor/blob/master/docs/installation_guide.md) by allowing a user to immediately bring up (with Docker Compose) Harbor without going through all the steps of the setup process as described [here](https://github.com/vmware/harbor/blob/master/docs/installation_guide.md). It works by setting shell environment variables instead of having to edit the `harbor.cfg` file. The environment variables are passed onto the harbor-setupwrapper container which goes through the preparation process.  
 
-Note that this tool is tightly coupled with (and it actually embeds into the harbor-setupwrapper docker images) the 0.5.0 version of Harbor. This tool, in its current shape and form, cannot be used to deploy a different version.  
+Each version of the wrapper is tightly coupled with (and it actually embeds into the harbor-setupwrapper docker images) the particular version of Harbor you want to deploy. This tool, in its current shape and form, supports deploying Harbor version 0.5.0 and 1.1.1.   
 
 ## Usage
-Clone the harbor-setupwrapper repo and "up" the Docker Compose file you find in the `harbor-setupwrapper` directory. Before you launch it, you will have to e
-
-Export the `HARBORHOSTNAME` and the `HARBOR_ADMIN_PASSWORD` variables.
-
-"Up" the Docker Compose file you find in the `harbor-setupwrapper` directory.
+Clone the harbor-setupwrapper repo, move into the directory that represents the version you want to deploy and "up" the Docker Compose file you find in there. Before you launch it, you will have to export the `HARBORHOSTNAME` and the `HARBOR_ADMIN_PASSWORD` variables.
 
 If you do not export the variables, Docker Compose will show this:
 
@@ -37,5 +33,5 @@ Hint: if you keep bringing up and down Harbor instances on the same host and you
 - I have only really tested this with the `HARBORHOSTNAME` and `HARBOR_ADMIN_PASSWORD` variables. Other variables should work but I haven’t tested them
 - There will definitely be scenarios where this will break. For example, I haven’t implemented a way to create certificates if you choose to use a secure connection (https). This would need to be additional logic inside `harbor-setupwrapper.sh` which just doesn’t exist at the time of this writing (hint: do not try to enable https because weird things may happen)
 - The original on-line installer is (really) meant to be run on a single Docker host. The approach I have implemented honors that model and assumes the same
-- Because of the above, I didn’t even try to deploy this compose file on a distributed Swarm cluster. BTW, in the transition from “legacy Swarm” to “Swarm mode” Docker Compose doesn’t seem to have gained compatibility with the latter and given I didn’t want to waste too much time with the former, I have just opted to not test it in a Swarm environment
+- Because of the above, I didn’t even try to deploy this compose file on a distributed Swarm cluster. 
 - More caveats that I haven’t thought about (but that certainly may exist!)
